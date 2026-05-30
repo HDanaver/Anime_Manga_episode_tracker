@@ -1,7 +1,11 @@
 package com.example.anime_manga_episode_tracker;
 
+import com.google.gson.annotations.SerializedName;
+
 public class KitsuAttributes{
+    @SerializedName("canonicalTitle")
     private String title;
+    @SerializedName("posterImage")
     private PosterImage poster;
     private Integer episodeCount;
     private Integer chapterCount;
