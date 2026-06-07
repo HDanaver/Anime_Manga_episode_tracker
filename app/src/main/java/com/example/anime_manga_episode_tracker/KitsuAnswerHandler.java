@@ -39,7 +39,7 @@ public class KitsuAnswerHandler {
         });
     }
 
-    // 2. Részletek lekérése metódus
+
     public void getAnimeDetails(String id, KitsuDetailsCallback callback) {
         apiService.getAnimeDetails(id).enqueue(new Callback<KitsuResponse>() {
             @Override
@@ -60,7 +60,6 @@ public class KitsuAnswerHandler {
         });
     }
 
-    // --- INTERFÉSZEK A MAINACTIVITY-VEL VALÓ KOMMUNIKÁCIÓHOZ ---
     public interface KitsuSearchCallback {
         void onSuccess(List<KitsuData> results);
         void onError(String errorMessage);
