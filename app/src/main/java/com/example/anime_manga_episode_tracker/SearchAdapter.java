@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,6 +84,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     );
 
                     new Thread(() -> animeDAO.insert(entity)).start();
+                    Toast.makeText(view.getContext(), "Hozzáadva a könyvtárhoz: " + entity.getTitle(), Toast.LENGTH_SHORT).show();
 
                     if (listener != null) {
                         listener.onItemClick(kitsuData);
@@ -94,16 +97,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             binding.textView.setText(kitsuData.getAttributes().getTitle());
             String posterUrl = null;
             if (kitsuData.getAttributes().getPoster() != null) {
+                // Megpróbáljuk a különböző méreteket, a legkisebbtől a legnagyobbig
                 posterUrl = kitsuData.getAttributes().getPoster().getSmall();
                 if (posterUrl == null) posterUrl = kitsuData.getAttributes().getPoster().getMedium();
                 if (posterUrl == null) posterUrl = kitsuData.getAttributes().getPoster().getLarge();
                 if (posterUrl == null) posterUrl = kitsuData.getAttributes().getPoster().getOriginal();
             }
 
-            if (posterUrl != null) {
-                Picasso.get().load(posterUrl).fit().into(binding.imageView);
+            if (posterUrl != null && !posterUrl.isEmpty()) {
+                // Biztosítjuk, hogy https-t használunk, ha véletlenül http jönne
+                if (posterUrl.startsWith("http://")) {
+                    posterUrl = posterUrl.replace("http://", "https://");
+                }
+                
+                Picasso.get()
+                        .load(posterUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .into(binding.imageView);
             } else {
-                Picasso.get().load(R.drawable.ic_launcher_background).fit().into(binding.imageView);
+                Picasso.get().load(R.drawable.ic_launcher_background).into(binding.imageView);
             }
         }
     }

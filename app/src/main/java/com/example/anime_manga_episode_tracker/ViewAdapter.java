@@ -89,7 +89,15 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
             }
 
             if (animeEntity.getPosterUrl() != null && !animeEntity.getPosterUrl().isEmpty()) {
-                Picasso.get().load(animeEntity.getPosterUrl()).into(binding.posterImageView);
+                String posterUrl = animeEntity.getPosterUrl();
+                if (posterUrl.startsWith("http://")) {
+                    posterUrl = posterUrl.replace("http://", "https://");
+                }
+                Picasso.get()
+                        .load(posterUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .into(binding.posterImageView);
             } else {
                 Picasso.get().load(R.drawable.ic_launcher_background).into(binding.posterImageView);
             }
